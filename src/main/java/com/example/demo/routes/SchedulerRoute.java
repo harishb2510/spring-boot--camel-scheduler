@@ -16,13 +16,13 @@ public class SchedulerRoute extends RouteBuilder  {
 
     @Override
     public void configure() throws Exception {
-        from("quartz:camel?cron=0/10+*+*+*+*+?").log("scheduled to http route")
+        from("quartz:camel?cron=0/10+*+*+*+*+?").log("Camel-Quartz Scheduler triggering http route").log("scheduled to http route")
                 .to("direct:http");
-        log.info("Camel-Quartz Scheduler triggering http route");
         JacksonDataFormat parser = new JacksonDataFormat(ObjectsDto.class);
         from("direct:http")
-                .routeId("poc http").log("inside http route"+System.lineSeparator())
-                .to("http://localhost:8080/get-transaction-data")
+                .routeId("poc http").log("inside http route")
+                .to("" +
+                        "")
                 .unmarshal(parser)
                 .split(body())
                 .log("body " + "${body}")
@@ -36,7 +36,7 @@ public class SchedulerRoute extends RouteBuilder  {
                                 model.setMaterialName(dtos.getResult().get(i).getMaterialName());
                                 repo.save(model);
                             }
-                            log.info("Saved details in db");
+                            log.info("Saved details in db"+System.lineSeparator());
                         }
                 );
     }
